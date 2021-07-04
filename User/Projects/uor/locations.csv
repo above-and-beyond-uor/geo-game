@@ -40,6 +40,6 @@ $(""#harris_false_button"").on(""click"", function(){
 });
 
 </script>",yes,,harris_garden,
--0.9531,51.4423,sportspark,hi,yes,sports,sportspark,
--0.9491,51.4433,tennis courts,ho,yes,sports,tennis_courts,
+-0.9531,51.4423,sportspark,"This is where you play a lot of sports, but we were thinking of a grand-slam.",yes,sports,sportspark,
+-0.9491,51.4433,tennis courts,"Correct, next question:",yes,sports,tennis_courts,
 ,,,,,,,
