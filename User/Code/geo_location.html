@@ -156,6 +156,8 @@ stimuli_locations.forEach(function(this_location, index){
 
 $("#show_locations").on("click", function(){
   $(".location").show();
+  $(".location").removeClass("btn-secondary", false);
+  $(".location").addClass("btn-primary", false);
   $(".location").prop("disabled", false);
 });
 
