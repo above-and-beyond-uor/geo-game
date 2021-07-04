@@ -58,6 +58,7 @@
 <button id="move_down">Down</button>
 <button id="move_right">right</button>
 <button id="move_left">Left</button>
+<button id="show_locations">show all locations</button>
 
 <p id="demo"></p>
 
@@ -153,6 +154,10 @@ stimuli_locations.forEach(function(this_location, index){
   center_coords(x_pos, y_pos, location_element);
 });
 
+$("#show_locations").on("click", function(){
+  $(".location").show();
+  $(".location").prop("disabled", false);
+});
 
 $(".location").on("click", function(){
   var this_row = stimuli_locations.filter(row => row.id == $(this)[0].id)[0];
