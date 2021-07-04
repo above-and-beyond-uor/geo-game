@@ -1,4 +1,4 @@
-long,lat,btn_text,main_text,hidden,
+long,lat,btn_text,main_text,hidden,class,id,
 -0.9365,51.4434,a garden,"<h5 class=""text-primary"">What stops existing as soon as you say it?</h5>
 
 <input type=""text"" id=""riddle"">
@@ -7,11 +7,14 @@ long,lat,btn_text,main_text,hidden,
 <script>
 $(""#riddle_btn"").on(""click"", function(){
   if($(""#riddle"").val().toLowerCase().indexOf(""secret"") !== -1){
-    bootbox.alert(""Correct, your next activity is to do XXX"");
+    $(""#harris_garden"").show();
+    $(""#harris_garden"").show()
+    bootbox.alert(""Correct, proceed to the next garden!"");
   } else {
     bootbox.alert(""That's not the right answer (don't worry about capital letters)"");
   }
 });
 </script>
-",no,
-,,,,,
+",no,,secret_garden,
+-0.9393,51.4354,harris garden,beep bop,yes,,harris_garden,
+,,,,,,,

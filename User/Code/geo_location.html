@@ -3,17 +3,17 @@
 <style>
 #your_location{
   !background-color: blue;
-  border-radius: 50px;
-  width: 50px;
-  height: 50px;
+  border-radius: {{user_radius}};
+  width: {{user_radius}};
+  height: {{user_radius}};
   position:absolute;
   animation: pulse 2s infinite;
 }
 #detection_radius{
-  border-radius: 100px;
+  border-radius: {{radar_radius}};
   border-width:5px !important;
-  width:  100px;
-  height: 100px;
+  width:  {{radar_radius}};
+  height: {{radar_radius}};
   position:absolute;
   background-color:blue;
   opacity: 0.5;
@@ -80,7 +80,6 @@ $("#move_right").on("click",function(){
   pilot_object.right += 50;
 });
 
-var radius_pixels = 100;
 
 
 function center_coords(x_pos,y_pos,element){
@@ -115,9 +114,6 @@ function collidesWith (element1, element2) {
 
 
 //https://www.openstreetmap.org/ is useful for getting coordinates and images
-
-	
-
 var x_range = [{{longitude_min}},{{longitude_max}}];
 var y_range = [{{latitude_min}},{{latitude_max}}];
 var x_width = x_range[1] - x_range[0];
@@ -136,17 +132,19 @@ function x_y_positions(longitude, latitude){
 
 
 stimuli_locations.forEach(function(this_location, index){
-  console.log("this_location");
-  console.log(this_location);
-  
   location_element = $("<button>");
   location_element.html("?")
     .addClass("btn")
     .addClass("btn-secondary")
     .addClass("location")
-    .prop("id","location_" + index)
+    .prop("id",this_location.id)
     .prop("disabled",true)
     .css("position", "absolute");
+    
+  if(this_location.hidden == "yes"){
+    location_element.css("display", "none");
+  }
+  
   $(document.body).append(location_element);
   [x_pos,y_pos] = x_y_positions(this_location.long, this_location.lat);
   center_coords(x_pos, y_pos, location_element);
@@ -154,26 +152,17 @@ stimuli_locations.forEach(function(this_location, index){
 
 
 $(".location").on("click", function(){
-  var this_index = $(this)[0].id.replace("location_","");
-  bootbox.alert(stimuli_locations[this_index].main_text);
+  var this_row = stimuli_locations.filter(row => row.id == $(this)[0].id)[0];
+  bootbox.alert(this_row.main_text);
 })
 
 function detect_location(x_pos, y_pos){
   stimuli_locations.forEach(function(this_location, index){
-    
-    
-    [this_longitude, this_latitude] = x_y_positions(this_location.long, this_location.lat);
-    x_dist = parseFloat(this_longitude) - parseFloat(x_pos);
-    y_dist = parseFloat(this_latitude) - parseFloat(y_pos);
-    var this_distance = Math.sqrt(Math.pow(x_dist,2) + Math.pow(y_dist,2));
-    //radius_pixels
-    if(collidesWith($("#detection_radius")[0], $("#location_" + index)[0])){
-
-    //if(this_distance < radius_pixels){
-      $("#location_" + index).html(this_location["btn_text"]);
-      $("#location_" + index).removeClass("btn-secondary", false);
-      $("#location_" + index).addClass("btn-primary", false);
-      $("#location_" + index).prop("disabled", false);
+    if(collidesWith($("#detection_radius")[0], $("#" + this_location.id)[0])){
+      $("#" + this_location.id).html(this_location["btn_text"]);
+      $("#" + this_location.id).removeClass("btn-secondary", false);
+      $("#" + this_location.id).addClass("btn-primary", false);
+      $("#" + this_location.id).prop("disabled", false);
     }
   });
 }
