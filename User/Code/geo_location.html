@@ -144,6 +144,9 @@ stimuli_locations.forEach(function(this_location, index){
   if(this_location.hidden == "yes"){
     location_element.css("display", "none");
   }
+  if(this_location.class !== ""){
+    location_element.addClass(this_location.class);
+  }
   
   $(document.body).append(location_element);
   [x_pos,y_pos] = x_y_positions(this_location.long, this_location.lat);

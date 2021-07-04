@@ -6,15 +6,40 @@ long,lat,btn_text,main_text,hidden,class,id,
 
 <script>
 $(""#riddle_btn"").on(""click"", function(){
+  /*
+  * need to unbind and bind due to not all elements being drawn yet
+  */
+  //var harris_garden = this;
   if($(""#riddle"").val().toLowerCase().indexOf(""secret"") !== -1){
-    $(""#harris_garden"").show();
-    $(""#harris_garden"").show()
     bootbox.alert(""Correct, proceed to the next garden!"");
+    setTimeout(function(){
+      $(""#harris_garden"").show();
+    },100);
   } else {
     bootbox.alert(""That's not the right answer (don't worry about capital letters)"");
   }
+
 });
 </script>
 ",no,,secret_garden,
--0.9393,51.4354,harris garden,beep bop,yes,,harris_garden,
+-0.9393,51.4354,harris garden,"<h5>Hedge maze</h5>
+True or false: There used to be a hedge maze here, but too many students got lost in it while inebriated, so this had to be discontinued? <br>
+<br>
+<button id=""harris_true_button"">True</button>
+<button id=""harris_false_button"">False</button>
+<script>
+$(""#harris_true_button"").on(""click"", function(){
+  bootbox.alert(""We have no evidence of this, so we assume it's false."");
+});
+
+$(""#harris_false_button"").on(""click"", function(){
+  setTimeout(function(){
+    $("".sports"").show();
+  },100);
+  bootbox.alert(""Correct! Next, go to a location where you can play a grand sport."");
+});
+
+</script>",yes,,harris_garden,
+-0.9531,51.4423,sportspark,hi,yes,sports,sportspark,
+-0.9491,51.4433,tennis courts,ho,yes,sports,tennis_courts,
 ,,,,,,,
