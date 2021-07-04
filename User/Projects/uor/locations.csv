@@ -1,0 +1,17 @@
+long,lat,btn_text,main_text,hidden,
+-0.9365,51.4434,a garden,"<h5 class=""text-primary"">What stops existing as soon as you say it?</h5>
+
+<input type=""text"" id=""riddle"">
+<button id=""riddle_btn"">Submit answer</button>
+
+<script>
+$(""#riddle_btn"").on(""click"", function(){
+  if($(""#riddle"").val().toLowerCase().indexOf(""secret"") !== -1){
+    bootbox.alert(""Correct, your next activity is to do XXX"");
+  } else {
+    bootbox.alert(""That's not the right answer (don't worry about capital letters)"");
+  }
+});
+</script>
+",no,
+,,,,,
