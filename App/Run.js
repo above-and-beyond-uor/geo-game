@@ -997,10 +997,16 @@ function insert_start() {
 
 function load_phases() {
   var org_repo = project_json.location.split("/");
-  home_dir = Collector.electron.git.locate_repo({
-    org: org_repo[0],
-    repo: org_repo[1],
-  });
+  switch (Project.get_vars.platform) {
+    case "simulateonline":
+    case "localhost":
+    case "preview":
+      home_dir = Collector.electron.git.locate_repo({
+        org: org_repo[0],
+        repo: org_repo[1],
+      });
+      break;
+  };
 
   var loaded_phases = 0;
   var phases = Object.keys(project_json.phasetypes).length;
