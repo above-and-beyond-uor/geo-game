@@ -1,4 +1,4 @@
-item,code,max time,text,shuffle 1,map_file,location_sheet,longitude_min,longitude_max,latitude_min,latitude_max,radar_radius,user_radius,
+item,phasetype,max time,text,shuffle 1,map_file,location_sheet,longitude_min,longitude_max,latitude_min,latitude_max,radar_radius,user_radius,
 0,instruct,,"This website will not store information, including your location. Your phone will use your location to work out where you are on our map. <br>
 Please only use this app during the day time and with others.
 <br>

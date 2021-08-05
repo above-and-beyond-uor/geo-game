@@ -1,4 +1,183 @@
+function correct_master(){
+  master = Collector.electron.fs.read_file("", "master.json");
+  if(master === ""){
+    /* load from default */
+    master = Collector.electron.fs.read_default("", "master.json")
+  }
+  master = JSON.parse(master);
+
+  /*
+  * missing objects
+  */
+  master.data = Collector.missing_object(master.data);
+  master.data.servers = Collector.missing_object(master.data.servers);
+
+  master.surveys.user_surveys = Collector.missing_object(master.surveys.user_surveys);
+
+  if(typeof(master.phasetypes) !== "undefined"){
+    master.phasetypes = master.phasetypes;
+    delete(master.phasetypes);
+  }
+
+  /*
+  * "trialtype" --> code for master
+  */
+
+  if(typeof(master.trialtypes) !== "undefined"){
+    master.phasetypes         = master.trialtypes;
+    master.phasetypes.default = master.phasetypes.default_trialtypes;
+    master.phasetypes.user    = master.phasetypes.user_codes;
+    delete(master.trialtype);
+    delete(master.trialtypes);
+    delete(master.phasetypes.default_trialtypes);
+    delete(master.phasetypes.user_codes);
+  }
+  master.phasetypes         = Collector.missing_object(master.phasetypes);
+  master.phasetypes.default = Collector
+    .missing_object(master.phasetypes.default);
+  master.phasetypes.user = Collector
+    .missing_object(master.phasetypes.user);
+  master.phasetypes.graphic = Collector
+    .missing_object(master.phasetypes.graphic);
+  master.phasetypes.graphic.files = Collector
+    .missing_object(master.phasetypes.graphic.files);
+
+  /*
+  * studies --> projects
+  */
+
+  if(typeof(master.projects) === "undefined"){
+    if(typeof(master.exp_mgmt) !== "undefined"){
+      master.projects = master.exp_mgmt;
+    } else {
+      master.projects = master.project_mgmt;
+    }
+
+    master.projects = Collector.missing_object(master.projects);
+
+    if(typeof(master.projects.experiment) !== "undefined"){
+      master.projects.project  = master.projects.experiment;
+    }
+    master.projects.projects = master.projects.experiments;
+  }
+  delete(master.project_mgmt);
+  delete(master.projects.experiment);
+  delete(master.projects.experiments);
+
+  master.projects.projects = Collector.missing_object(master.projects.projects);
+
+  var projects = Object.keys(master.projects.projects);
+  projects.forEach(function(project){
+
+    try{
+      var this_project = master.projects.projects[project];
+
+
+      /*
+      * "trial type" --> "code" for each project
+      */
+      var all_procs = Object.keys(this_project.all_procs);
+      all_procs.forEach(function(this_proc){
+        if(typeof(this_project.all_procs[this_proc]) === "object"){
+          this_project.all_procs[this_proc] = Papa.unparse(this_project.all_procs[this_proc]);
+        }
+        this_project.all_procs[this_proc] = this_project
+          .all_procs[this_proc].replace("trial type,","code,");
+
+        this_project.all_procs[this_proc] = Collector.PapaParsed(this_project.all_procs[this_proc]);
+
+      });
+      if(typeof(this_project.trialtypes) !== "undefined"){
+        this_project.phasetypes = this_project.trialtypes;
+        delete(this_project.trialtypes);
+      }
+    } catch(error){
+      console.log("skipping this");
+    }
+
+  });
+
+
+
+  if(typeof(master.phasetypes.user_trialtypes) !== "undefined"){
+    Object.keys(master.phasetypes.user_trialtypes).forEach(function(item){
+      if(typeof(master.phasetypes.user[item]) === "undefined"){
+        master.phasetypes.user[item] = master.phasetypes.user_trialtypes[item];
+      }
+    });
+  }
+  master.phasetypes.graphic = Collector
+    .missing_object(master.phasetypes.graphic);
+  master.phasetypes.graphic.files = Collector
+    .missing_object(master.phasetypes.graphic.files);
+
+  if(typeof(master.phasetypes.graphic.files) === "undefined" &
+     typeof(master.phasetypes.graphic.trialtypes) !== "undefined"){
+    master.phasetypes.graphic.files = master.phasetypes.graphic.trialtypes;
+  }
+
+
+  /*
+  * remove any duplicates of default code fiels in the user
+  */
+  var default_code_files = Object.keys(master.phasetypes.default);
+  default_code_files.forEach(function(default_file){
+    delete(master.phasetypes.user[default_file]);
+  });
+}
+
+function correct_user(){
+  if(typeof(user.data_folder) === "undefined" || user.data_folder === ""){
+    bootbox.confirm("You don't (yet) have a folder where we'll put your data <b>when you test participants <u>on this device</u></b>. You're about to be asked where you would like this data to go. Please think carefully about this to make sure that your participant data is secure.", function(result){
+      if(result){
+        var data_folder = Collector.electron.find_path()[0];
+        if(data_folder){
+          user.data_folder = data_folder;
+          $("#local_data_folder").val(data_folder);
+          Collector.save_user();
+        }
+      }
+    });
+  } else {
+    $("#local_data_folder").val(user.data_folder);
+  }
+}
+
 Collector = {
+  clean_string: function(this_string){
+    return this_string
+    .replaceAll(" ", "_")
+    .replaceAll(" ", "_")
+    .replaceAll("-", "_")
+    .replaceAll("@", "_at_")
+    .replaceAll(".", "_dot_")
+    .replaceAll("/", "_forward_slash_")
+    .replaceAll("\\", "_back_slash")
+    .replaceAll("'", "_single_quote_")
+    .replaceAll('"', "_double_quote_")
+    .replaceAll("|", "_pipe_")
+    .replaceAll("?", "_question_")
+    .replaceAll("#", "_hash_")
+    .replaceAll(",", "_comma_")
+    .replaceAll("[", "_square_open_")
+    .replaceAll("]", "_square_close_")
+    .replaceAll("(", "_bracket_open_")
+    .replaceAll(")", "_bracket_close_")
+    .replaceAll("*", "__")
+    .replaceAll("^", "__")
+    .replaceAll(":", "__")
+    .replaceAll(";", "__")
+    .replaceAll("%", "__")
+    .replaceAll("$", "__")
+    .replaceAll("£", "__")
+    .replaceAll("!", "__")
+    .replaceAll("`", "__")
+    .replaceAll("+", "__")
+    .replaceAll("=", "__")
+    .replaceAll("<", "__")
+    .replaceAll(">", "__")
+    .replaceAll("~", "__");
+  },
   clean_obj_keys: function(this_obj){
     Object.keys(this_obj).forEach(function(this_key){
       clean_key = this_key.toLowerCase().replace(".csv","");
@@ -14,14 +193,14 @@ Collector = {
     for(var i = 0; i < this_csv.length ; i++) {
       csv_row = this_csv[i];
       Object.keys(csv_row).forEach(function(header){
-        if(response_headers.indexOf(header) == -1){
+        if(response_headers.indexOf(header) === -1){
           response_headers.push(header);
         }
       });
     }
     for(var i =0; i < this_csv.length; i++){
       response_headers.forEach(function(this_header){
-        if(typeof(this_csv[i][this_header]) == "undefined"){
+        if(typeof(this_csv[i][this_header]) === "undefined"){
           this_csv[i][this_header] = "";
         }
       });
@@ -29,72 +208,89 @@ Collector = {
     return this_csv;
   },
   custom_alert: function(msg, duration) {
-    function create_alerts_container() {
-      if (typeof(alerts_ready) !== "undefined" && alerts_ready) return;
 
-      var top_padding = parseFloat(
-        $("#sim_navbar").css("height").replace("px","")) +
-        parseFloat($("#top_navbar").css("height").replace("px","")
-      );
+    if(typeof(duration) === "undefined"){
+      duration = 3000;
+    }
 
-      var this_background_color;
-      var border_color; //"#DAA";
-      var this_color;
-      if(msg.toLowerCase().indexOf("alert") !== -1){
-        this_background_color = "#ffc8c8";
-        border_color = "#800"; //"#DAA";
-        this_color = "#800";
+    var top_padding = parseFloat(
+      $("#sim_navbar").css("height").replace("px","")) +
+      parseFloat($("#top_navbar").css("height").replace("px","")
+    );
+    var this_background_color;
+    var border_color; //"#DAA";
+    var this_color;
+    if(msg.toLowerCase().indexOf("alert") !== -1){
+      this_background_color = "#ffc8c8";
+      border_color = "#800";
+      this_color = "#800";
+    } else {
+      this_background_color = "#96ffa8";
+      border_color = "#24402a";
+      this_color = "#24402a";
+    }
+
+    var this_alert = $("<div>")
+      .css({
+        backgroundColor:  this_background_color,
+        border:           "3px solid " + border_color,
+        borderRadius:     "6px",
+        color:            this_color,
+        "font-size":      "20px",
+        left:             "10px",
+        // margin:           "10px 5px",
+        opacity:          "0",
+        padding:          "20px",
+        position:         "fixed",
+        right:            "10px",
+        top:              (top_padding + 20) + "px",
+        "z-index":        1000
+      })
+      .html(msg + " (click to keep on screen and click again to hide)");
+    /*
+    - need to think through how to avoid multiple redundant elements through appending...
+    */
+
+
+    $("body").append(this_alert);
+    this_alert.animate(
+      {opacity: "1"},
+      500,
+      "swing"
+    );
+
+
+    var animation_active = true;
+    this_alert.click(function(){
+      if(animation_active === true){
+        animation_active = false;
+        this_alert.stop();
       } else {
-        this_background_color = "#96ffa8";
-        border_color = "#24402a";
-        this_color = "#24402a";
+        $(this).animate({
+          opacity:  "0"
+        }, 500, "swing", function() {
+          $(this).remove();
+        });
       }
-
-      var el = $("<div>");
-      el.css({
-          position: "fixed",
-          top: (top_padding+20) + "px",
-          left: "10px",
-          right: "10px",
-          backgroundColor: this_background_color,
-          borderRadius: "6px",
-          border: "1px solid " + border_color,
-          color: this_color
-      });
-
-      el.attr("id", "alerts");
-      el.css("z-index", "1000");
-
-      $("body").append(el);
-
-      var style = $("<style>");
-      style.html("#alerts > div { margin: 10px 5px; }");
-
-      $("body").append(style);
-
-      alerts_ready = true;
-    }
-    if(typeof(duration) == "undefined"){
-      duration = 1000;
-    }
-    create_alerts_container();
-    var el = $("<div>");
-    el.html(msg);
-    el.css("opacity", "0");
-    $("#alerts").append(el).show();
-    el.animate({opacity: "1"}, 600, "swing", function() {
-      $(this).delay(duration).animate({height: "0px"}, 800, "swing", function() {
-        $(this).remove();
-        if ($("#alerts").html() === '') {
-          $("#alerts").hide();
-        }
-      });
     });
+
+    setTimeout(function() {
+      if(animation_active){
+        $(this_alert).animate({
+          opacity:  "0"
+        }, 500, "swing", function() {
+          $(this_alert).remove();
+        });
+      }
+    },duration);
+
+
+
   },
   detect_context: function(){
     //turn to false to make use of eel and python
     if(typeof(parent.dropbox_developer) !== "undefined"){
-      if(parent.dropbox_developer  ==  true){
+      if(parent.dropbox_developer  ===  true){
         return "github";
       } else {
         return "localhost";
@@ -106,14 +302,6 @@ Collector = {
     } else {
       return "server";
     }
-  },
-  detect_exe: function(){
-    $.get("../User/master.json",function(result){
-      Collector.is_exe = false;
-    }).catch(function(error){
-      Collector.is_exe = true;
-      console.log("the error above just means that you are using this as an app rather than online");
-    });
   },
   download_file: function(filename,content,type){
     var blob = new Blob([content], {type: 'text/' + type});
@@ -144,9 +332,25 @@ Collector = {
     mod_html = split_trialtype.join("{{");
     return variables;
   },
+  makeid: function(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  },
+  missing_object: function(this_obj){
+    if(typeof(this_obj) === "undefined"){
+      return {};
+    } else {
+      return this_obj;
+    }
+  },
   PapaParsed: function(content){
     //check if parsed stylesheet
-    if(typeof(content) == "object"){
+    if(typeof(content) === "object"){
       post_parsed = Papa.parse(Papa.unparse(content),{
         beforeFirstChunk: function(chunk) {
           var rows = chunk.split( /\r\n|\r|\n/ );
@@ -199,6 +403,31 @@ Collector = {
   save_user: function(){
     Collector.electron.fs.write_user(JSON.stringify(user, null, 2));
   },
+  start: function(){
+    user = JSON.parse(Collector.electron.fs.load_user());
+    if(typeof(user.current) === "undefined" || typeof(user.current.path) === "undefined"){
+      var github_dialog_exists = setInterval(function(){
+        if($("#github_dialog").length === 1){
+          clearInterval(github_dialog_exists);
+          $("#github_dialog").show();
+          bootbox.alert("It looks like you haven't yet included any github repositories for your projects. You need to have a github account and organisation to create a project. Once you've done that (see our <a href='https://docs.google.com/document/d/1SKYIJF1dAjMDS6EHUIwfZm2KQVOzx17S6LbU_oSGxdE/edit?usp=sharing' target='_blank'>documents</a>) you can use Collector to build your projects.");
+        }
+      },1000);
+    } else {
+      correct_master();
+      correct_user();
+      list_repos();
+      list_projects();
+      list_graphics();
+      list_phasetypes();
+      initiate_actions();
+      list_keys();
+      list_data_servers();
+      list_servers();
+      list_surveys();
+      //list_pathways();
+    }
+  },
   //https://stackoverflow.com/a/20745721/4490801
   timer: function(callback, delay) {
     var id, started, remaining = delay, running;
@@ -230,47 +459,4 @@ Collector = {
   },
 
   version: "cat"
-};
-
-/*
-* Need to run this ASAP to have this info available later.
-*/
-Collector.detect_exe();
-
-//////////////////////
-// online solutions //
-//////////////////////
-
-// solution by csharptest.net at
-// https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
-//////////////////////////////////////////////////////////////////////////////////////////////
-Collector.makeid = function(length) {
-  var result           = '';
-  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-  for ( var i = 0; i < length; i++ ) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-};
-
-/*
-* functions added from other files
-*/
-
-/*
-* SessionCheck.js
-*/
-// add session
-// add create_session()
-// add update_session()
-
-
-/*
-* by qwerty at
-* https://stackoverflow.com/questions/2116558/fastest-method-to-replace-all-instances-of-a-character-in-a-string
-*/
-String.prototype.replaceAll = function(str1, str2, ignore)
-{
-  return this.replace(new RegExp(str1.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g,"\\$&"),(ignore?"gi":"g")),(typeof(str2)=="string")?str2.replace(/\$/g,"$$$$"):str2);
 };
