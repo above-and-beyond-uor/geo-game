@@ -17,7 +17,7 @@
   },
   "phasetypes": {
     "instruct": "[[[LOCATION]]]../Default/DefaultPhaseTypes/instruct.html",
-    "geo_location": "[[[LOCATION]]]../User/PhaseTypes/geo_location.html"
+    "geo_location": "[[[LOCATION]]]../Default/DefaultPhaseTypes/geo_location.html"
   },
   "procs_csv": {},
   "stims_csv": {}
