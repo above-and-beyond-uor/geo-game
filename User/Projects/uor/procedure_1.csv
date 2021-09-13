@@ -1,6 +1,6 @@
 item,phasetype,max time,text,shuffle 1,map_file,location_sheet,longitude_min,longitude_max,latitude_min,latitude_max,radar_radius,user_radius,
 0,instruct,,"You're about to see a map of campus with trivia questions and locations. Once you've reached a location that has a [?] symbol it will turn into a blue button you can press. Once you have completed the location it will turn gold.<br><br>
-This website will not store information, including your location. Your phone will use your location to work out where you are on our map. <br><br>
+This website will <b><u>not</u></b> store information about you or your location. Your phone will use your location to work out where you are on our map. <br><br>
 Please only use this app during the day time.<br><br>
 Have fun!
 ",,,,,,,,,,
