@@ -126,8 +126,6 @@ var x_width = x_range[1] - x_range[0];
 var y_width = y_range[1] - y_range[0];
 
 var stimuli_locations = parent.parent.Collector.PapaParsed(Phase.get_stim("{{location_sheet}}"));
-console.log("stimuli_locations");
-console.log(stimuli_locations);
 
 
 function x_y_positions(longitude, latitude){
@@ -183,7 +181,6 @@ function detect_location(x_pos, y_pos){
 }
 
 function getLocation() {
-  console.log(navigator);
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position){
       [x_pos,y_pos] = x_y_positions(position.coords.longitude, position.coords.latitude);
@@ -193,6 +190,8 @@ function getLocation() {
       
       center_coords(x_pos,y_pos, $("#your_location"));
       center_coords(x_pos,y_pos, $("#detection_radius"));
+      console.log("x_pos = " + x_pos);
+      console.log("y_pos = " + y_pos);
       
       detect_location(x_pos, y_pos);
       $("#lat_long").html(position.coords.latitude + "-" + position.coords.longitude);
