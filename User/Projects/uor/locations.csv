@@ -1,32 +1,232 @@
-long,lat,btn_text,main_text,hidden,class,id,
--0.9365,51.4434,a garden,"<h5 class=""text-primary"">What stops existing as soon as you say it?</h5>
+long,lat,btn_text,main_text,hidden,class,id,status,question,correct_answer,incorrect_answers,
+-0.946031,51.440885,Edith Morley Building,"This building, previously known as the HumSS is named after Edith Morley, who was appointed Professor in Reading in 1908 and is believed to be the first woman awarded the title of professor in a British university. 
 
-<input type=""text"" id=""riddle"">
-<button id=""riddle_btn"">Submit answer</button>
+<br><br>
+<h3>What subject was her title in?</h3>
+
+<button class=""morley_wrong btn btn-primary"">Art</button>
+<button class=""morley_right btn btn-primary"">English</button>
+<button class=""morley_wrong btn btn-primary"">Mathematics</button>
+<button class=""morley_wrong btn btn-primary"">Physics</button>
+<button class=""morley_wrong btn btn-primary"">Psychology</button>
 
 <script>
-$(""#riddle_btn"").on(""click"", function(){
-  /*
-  * need to unbind and bind due to not all elements being drawn yet
-  */
-  //var harris_garden = this;
-  if($(""#riddle"").val().toLowerCase().indexOf(""secret"") !== -1){
-    bootbox.alert(""Correct, proceed to the next garden!"");
-    setTimeout(function(){
-      $(""#harris_garden"").show();
-    },100);
-  } else {
-    bootbox.alert(""That's not the right answer (don't worry about capital letters)"");
-  }
+$("".morley_wrong"").on(""click"", function(){
+  bootbox.alert(""Nope, try again"");
+});
 
+$("".morley_right"").on(""click"", function(){
+  bootbox.alert(""Correct!"");
+  $(""#location_edith_morley"").removeClass(""btn-secondary"")  
+    .removeClass(""btn-primary"")
+    .addClass(""btn-warning"");
+});
+
+</script>
+",no,,location_edith_morley,done,later,later,later,
+-0.945248,51.441445,Minghella Building,"<h3>Opened in 2012 this houses the film & Tv department, containing a 72 seat cinema and a 100 seat theatre.</h3>
+
+<button class=""cinema_right btn btn-primary"">Nice, might stop by</button>
+<button class=""cinema_right btn btn-primary"">Theatre and films aren't my thing</button>
+
+<script>
+$("".cinema_right"").on(""click"", function(){
+  bootbox.alert(""Indeed! You can move on to the next location now."");
+  $(""#location_minghella"").removeClass(""btn-secondary"")  
+    .removeClass(""btn-primary"")
+    .addClass(""btn-warning"");
 });
 </script>
-",no,,secret_garden,
--0.9393,51.4354,harris garden,"<h5>Hedge maze</h5>
+",no,,location_minghella,done,later,later,later,
+-0.948434,51.443590,Tennis & Athletics,"Fancy a bit of sport? 
+<br><br>
+<h3>How many gold medals did University of Reading Alumni win in rowing in the 2012 olympics</h3>
+
+<button id=""sport_1_button""  class=""sport_wrong btn btn-primary"">0</button>
+<button id=""sport_1_button""  class=""sport_wrong btn btn-primary"">1</button>
+<button id=""sport_1_button""  class=""sport_right btn btn-primary"">2</button>
+<button id=""sport_1_button""  class=""sport_wrong btn btn-primary"">3</button>
+<button id=""sport_1_button""  class=""sport_wrong btn btn-primary"">4</button>
+<button id=""sport_1_button""  class=""sport_wrong btn btn-primary"">5</button>
+
+
+<script>
+$("".sport_wrong"").on(""click"", function(){
+  bootbox.alert(""Nope, try again"");
+});
+
+$("".sport_right"").on(""click"", function(){
+  bootbox.alert(""Correct!"");
+  $(""#location_sportspark"").removeClass(""btn-secondary"")  
+    .removeClass(""btn-primary"")
+    .addClass(""btn-warning"");
+});
+
+</script>",no,,location_sportspark,done,later,later,later,
+-0.947037,51.444090,Windsor Hall,"The most centrally located Hall on campus with 221 catered rooms with some flats having up to 26 people!
+<br>
+<button id=""windsor_1_button""  class=""windsor_confirm btn btn-primary"">26 seems like a lot!</button>
+
+<script>
+$("".windsor_confirm"").on(""click"", function(){
+  bootbox.alert(""Indeed! You can move on to the next location now."");
+  $(""#location_windsor"").removeClass(""btn-secondary"")  
+    .removeClass(""btn-primary"")
+    .addClass(""btn-warning"");
+});
+</script>",no,,location_windsor,done,later,later,later,
+-0.942163,51.445315,Foxhill House,"<h3>Built in 1868 to a Gothic Revival architectural style, today it houses which school?</h3>
+
+<button id=""law_1_button""  class=""law_wrong btn btn-primary"">Art</button>
+<button id=""law_2_button""  class=""law_wrong btn btn-primary"">Architecture</button>
+<button id=""law_2_button""  class=""law_wrong btn btn-primary"">English</button>
+<button id=""law_3_button""  class=""law_wrong btn btn-primary"">Gothic Architecture</button>
+<button id=""law_3_button""  class=""law_right btn btn-primary"">Law</button>
+<button id=""law_4_button""  class=""law_wrong btn btn-primary"">Mathematics</button>
+
+<script>
+$("".law_wrong"").on(""click"", function(){
+  bootbox.alert(""Nope, try again"");
+});
+
+$("".law_right"").on(""click"", function(){
+  bootbox.alert(""Correct!"");
+  $(""#location_foxhill"").removeClass(""btn-secondary"")  
+    .removeClass(""btn-primary"")
+    .addClass(""btn-warning"");
+});
+
+</script>",no,,location_foxhill,done,later,later,later,
+-0.939082,51.444913,Whiteknights Lake,"
+An artifical lake formed long ago, when water levels get very high the gate below can open to let out the excess water.
+
+<h3>We know H20 is water, but what is H204?</h3>
+
+<button class=""whiteknight_right btn btn-primary"">Drinking</button>
+<button class=""whiteknight_right btn btn-primary"">Scuber-diving</button>
+<button class=""whiteknight_right btn btn-primary"">Washing</button>
+<button class=""whiteknight_right btn btn-primary"">What? Ohh... it's a joke.</button>
+
+<script>
+$("".whiteknight_right"").on(""click"", function(){
+  bootbox.alert(""Indeed! You can move on to the next location now."");
+  $(""#location_whiteknights"").removeClass(""btn-secondary"")  
+    .removeClass(""btn-primary"")
+    .addClass(""btn-warning"");
+});
+</script>",no,,location_whiteknights,done,later,later,later,
+-0.937306,51.443437,Wessex Halls,"<h3>One of the more traditional halls on campus with the typical open corridor style. With 196 rooms, study area and it's own bar a pretty good hall.</h3>
+
+<button class=""wessex_right btn btn-primary"">Sounds nice</button>
+
+<script>
+$("".wessex_right"").on(""click"", function(){
+  bootbox.alert(""Indeed! You can move on to the next location now."");
+  $(""#location_wessex"").removeClass(""btn-secondary"")  
+    .removeClass(""btn-primary"")
+    .addClass(""btn-warning"");
+});
+
+</script>",no,,location_wessex,done,later,later,later,
+-0.936642,51.443198,The Secret Garden,"<div style=""font-size:10px"">Shssss it is a secret.</div> 
+If you are interested in growing some of your own food then look up the society at <a href=""https://www.rusu.co.uk/student-activities/volunteering/soc/studenteatsgarden/"" target=""_blank"">https://www.rusu.co.uk/student-activities/volunteering/soc/studenteatsgarden/</a>
+<br><br>
+
+
+<h3>The Chamber of <u>Secrets</u> features in which film/book series?</h3>
+
+
+<button class=""secret_wrong btn btn-primary"">Avengers/Marvel</button>
+<button class=""secret_wrong btn btn-primary"">Fast and Furious</button>
+<button class=""secret_right btn btn-primary"">Harry Potter</button>
+<button class=""secret_wrong btn btn-primary"">Jurassic Park/World</button>
+<button class=""secret_wrong btn btn-primary"">Star Wars</button>
+
+<script>
+$("".secret_wrong"").on(""click"", function(){
+  bootbox.alert(""Nope, try again"");
+});
+
+$("".secret_right"").on(""click"", function(){
+  bootbox.alert(""Correct!"");
+  $(""#location_secret_garden"").removeClass(""btn-secondary"")  
+    .removeClass(""btn-primary"")
+    .addClass(""btn-warning"");
+});
+
+</script>",no,,location_secret_garden,done,later,later,later,
+-0.934545,51.439159,Region 6 War Room,"A Grade 2 listed structure that was built in the early 1950s to co-ordinate civil defence in the event of nuclear war.
+
+<h3>What is it used for today?</h3>
+
+
+<button id=""war_room_1_button""  class=""war_room_right btn btn-primary"">Additional storage</button>
+<button id=""war_room_2_button""  class=""war_room_wrong btn btn-primary"">Arts and Crafts</button>
+<button id=""war_room_3_button""  class=""war_room_wrong btn btn-primary"">Defence planning</button>
+
+<script>
+$("".war_room_wrong"").on(""click"", function(){
+  bootbox.alert(""Nope, try again"");
+});
+
+$("".war_room_right"").on(""click"", function(){
+  bootbox.alert(""Correct!"");
+  $(""#location_war_room"").removeClass(""btn-secondary"")  
+    .removeClass(""btn-primary"")
+    .addClass(""btn-warning"");
+});
+
+</script>",no,,location_war_room,done,later,later,later,
+-0.935653,51.438311,Agriculture,"<h3>One of the stalwarts of Reading is the Agriculture department, where are we consistently ranked in the UK's top universities for impact in Agricultural Sciences research?</h3>
+
+<button class=""agriculture_right btn btn-primary"">First</button>
+<button class=""agriculture_wrong btn btn-primary"">Second</button>
+<button class=""agriculture_wrong btn btn-primary"">Third</button>
+<button class=""agriculture_wrong btn btn-primary"">Last :-(</button>
+
+<script>
+$("".agriculture_wrong"").on(""click"", function(){
+  bootbox.alert(""Nope, try again"");
+});
+
+$("".agriculture_right"").on(""click"", function(){
+  bootbox.alert(""Correct!"");
+  $(""#location_agriculture"").removeClass(""btn-secondary"")  
+    .removeClass(""btn-primary"")
+    .addClass(""btn-warning"");
+});
+
+</script>",no,,location_agriculture,done,later,later,later,
+-0.938530,51.438104,The Wilderness,"<h3>The University of Reading is one of the greenest and most biodiverse campuses around, what creatures can you see from here?</h3>
+
+<button class=""wilderness_wrong btn btn-primary"">Dinosaurs</button>
+<button class=""wilderness_right btn btn-primary"">Ducks and other birds</button>
+<button class=""wilderness_wrong btn btn-primary"">Elephants</button>
+<button class=""wilderness_wrong btn btn-primary"">Giraffes</button>
+<button class=""wilderness_wrong btn btn-primary"">Llamas</button>
+<button class=""wilderness_right btn btn-primary"">Mice and other rodents</button>
+
+<script>
+$("".wilderness_wrong"").on(""click"", function(){
+  bootbox.alert(""Nope, try again"");
+});
+
+$("".wilderness_right"").on(""click"", function(){
+  bootbox.alert(""Correct!"");
+  $(""#location_wilderness"").removeClass(""btn-secondary"")  
+    .removeClass(""btn-primary"")
+    .addClass(""btn-warning"");
+});
+
+</script>",no,,location_wilderness,done,later,later,later,
+-0.940900,51.435657,Harris Garden,"The perfect place for a picnic, full of plants from around the world
+<br>
+<br>
+<h5>Hedge maze</h5>
 True or false: There used to be a hedge maze here, but too many students got lost in it while inebriated, so this had to be discontinued? <br>
 <br>
-<button id=""harris_true_button"">True</button>
-<button id=""harris_false_button"">False</button>
+<button id=""harris_true_button"" class=""btn btn-primary"">True</button>
+<button id=""harris_false_button""  class=""btn btn-primary"">False</button>
 <script>
 $(""#harris_true_button"").on(""click"", function(){
   bootbox.alert(""We have no evidence of this, so we assume it's false."");
@@ -36,24 +236,47 @@ $(""#harris_false_button"").on(""click"", function(){
   setTimeout(function(){
     $("".sports"").show();
   },100);
-  bootbox.alert(""Correct! Next, go to a location where you can play a grand sport."");
+  bootbox.alert(""Correct!"");
+  $(""#location_harris"").removeClass(""btn-secondary"")  
+    .removeClass(""btn-primary"")
+    .addClass(""btn-warning"");
 });
 
-</script>",yes,,harris_garden,
--0.9531,51.4423,sportspark,"This is where you play a lot of sports, but we were thinking of a grand-slam.",yes,sports,sportspark,
--0.9491,51.4433,tennis courts,"Correct, next question:",yes,sports,tennis_courts,
--0.946031,51.440885,Edith Morley Building,"This building, previously known as the HumSS is named after Edith Morley, who was appointed Professor of English Language at Reading in 1908 and is believed to be the first woman awarded the title of professor in a British university. ",no,,,
--0.945248,51.441445,Minghella Building,"Opened in 2012 this houses the film & Tv department, containing a 72 seat cinema and a 100 seat theatre.",no,,,
--0.948434,51.443590,Tennis & Altheltics,"Fancy a bit of sport? ",no,,,
--0.947037,51.444090,Windsor Hall,The most centrally located Hall on campus with 221 catered rooms with some flats having up to 26 people!,no,,,
--0.942163,51.445315,Foxhill House,"Built in 1868 to a Gothic Revival arcitectual style, today it houses the Law School",no,,,
--0.939082,51.444913,Whiteknights Lake,"An artifical lake formed long ago, when water levels get very high the gate below can open to let out the excess water.",no,,,
--0.937306,51.443437,Wessex Halls,"One of the more traditional halls on campus with the typical open corridor style, with 196 rooms, study area and it's own bar a pretty good hall",no,,,
--0.936642,51.443198,The Secret Garden,Shssss it is a secret. If you are interested in growing some of your own food then look up the society at RUSU,no,,,
--0.934545,51.439159,Region 6 War Room,A Grade 2 listed structure that was built in the early 1950s to co-ordinate civil defence in the event of nuclear war - today the library use it for addtional storage.,no,,,
--0.935653,51.438311,Agriculture,"One of the stalwarts of Reading is the Agriculture department. We are also consistently ranked as the UK's top university for impact in Agricultural Sciences research ",no,,,
--0.938530,51.438104,The Wilderness,"The University of Reading is one of the greenest and most biodiverse campuses around, what creatures can you see from here?",no,,,
--0.940900,51.435657,Harris Garden,"The perfect place for a picnic, full of plants from around the world",no,,,
--0.943352,51.438318,Cole Muesum of Zoology,What is the massive Skeleton from?,no,,,
--0.942661,51.440863,Your Students Union,"With 150+ Clubs & Societies along with study space, advice, food, drink, merch and the biggest nightclub in Berkshire RUSU has so much to offer you!",no,,,
-,,,,,,,
+</script>
+",no,,location_harris,done,"True or false: There used to be a hedge maze here, but too many students got lost in it while inebriated, so this had to be discontinued?",false,true,
+-0.943352,51.438318,Cole Museum of Zoology,"<h5>What is the massive Skeleton from?</h5>
+<button class=""skeleton_wrong btn btn-primary"">A Dinosaur</button>
+<button class=""skeleton_wrong btn btn-primary"">A Duck or Bird</button>
+<button class=""skeleton_right btn btn-primary"">An Elephant</button>
+<button class=""skeleton_wrong btn btn-primary"">A Giraffe</button>
+<button class=""skeleton_wrong btn btn-primary"">A Llama</button>
+<button class=""skeleton_wrong btn btn-primary"">A Mouse or Rodent</button>
+<script>
+$("".skeleton_wrong"").on(""click"", function(){
+  bootbox.alert(""Nope, try again"");
+});
+
+$("".skeleton_right"").on(""click"", function(){
+  bootbox.alert(""Correct!"");
+  $(""#location_cole"").removeClass(""btn-secondary"")  
+    .removeClass(""btn-primary"")
+    .addClass(""btn-warning"");
+});
+
+</script>",no,,location_cole,done,What is the massive Skeleton from?,an elephant,"dinosaur,giraffe,llama",
+-0.942661,51.440863,Your Students Union,"<h3>With 150+ Clubs & Societies along with study space, advice, food, drink, merch and the biggest nightclub in Berkshire RUSU has so much to offer you!
+</h3>
+
+<button class=""rusu_right btn btn-primary"">Sounds good!</button>
+
+<script>
+
+$("".rusu_right"").on(""click"", function(){
+  bootbox.alert(""Indeed! You can move on to the next location now."");
+  $(""#location_union"").removeClass(""btn-secondary"")  
+    .removeClass(""btn-primary"")
+    .addClass(""btn-warning"");
+});
+
+</script>",no,,location_union,,,,,
+,,,,,,,,,,,
